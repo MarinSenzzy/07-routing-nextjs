@@ -14,6 +14,7 @@ import Modal from '@/components/Modal/Modal';
 
 const NotesClient = () => {
   const [search, setSearch] = useState<string>('');
+  const [tag, setTag] = useState<string | undefined>(undefined);
   const [page, setPage] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -21,8 +22,8 @@ const NotesClient = () => {
 
   const closeModal = () => setIsModalOpen(false);
   const { data, isLoading, isError, isSuccess, error } = useQuery({
-    queryKey: ['notes', search, page],
-    queryFn: () => fetchNotes({ search, page }),
+    queryKey: ['notes', search, page, tag],
+    queryFn: () => fetchNotes({ search, page, tag }),
     refetchOnMount: false,
     placeholderData: keepPreviousData,
     staleTime: 5 * 60 * 1000,

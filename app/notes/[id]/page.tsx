@@ -2,11 +2,11 @@ import { fetchOneNote } from '@/lib/api';
 import NoteDetailsClient from './NoteDetails.client';
 import { QueryClient, HydrationBoundary, dehydrate } from '@tanstack/react-query';
 import css from './NoteDetails.module.css';
-type Props = {
+type NoteDetailsProps = {
   params: Promise<{ id: string }>;
 };
 
-const NoteDetails = async ({ params }: Props) => {
+const NoteDetails = async ({ params }: NoteDetailsProps) => {
   const { id } = await params;
   console.log('note id:', id);
   const queryClient = new QueryClient();
