@@ -1,6 +1,5 @@
-import NoteDetailsClient from '@/app/notes/[id]/NoteDetails.client';
 import Modal from '@/components/Modal/Modal';
-// import { useRouter } from 'next/router';
+import { fetchOneNote } from '@/lib/api';
 
 interface NotesPreviewProps {
   params: Promise<{ id: string }>;
@@ -8,10 +7,12 @@ interface NotesPreviewProps {
 
 const NotesPreview = async ({ params }: NotesPreviewProps) => {
   const { id } = await params;
+  const note = await fetchOneNote(id);
   return (
     <>
-      <Modal onClose={() => {}}>
-        <NoteDetailsClient />
+      <Modal>
+        <h2>{note.title}</h2>
+        <p>{note.content}</p>
       </Modal>
     </>
   );
