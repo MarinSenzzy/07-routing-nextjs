@@ -20,8 +20,9 @@
 // };
 
 // export default NoteFilters;
-import NoteList from '@/components/NoteList/NoteList';
 import { fetchNotes } from '@/lib/api';
+import { QueryClient, HydrationBoundary, dehydrate } from '@tanstack/react-query';
+import NotesClient from './Notes.client';
 
 type NoteFiltersProps = {
   params: Promise<{ slug: string[] }>;
@@ -32,15 +33,18 @@ const NoteFilters = async ({ params }: NoteFiltersProps) => {
 
   const category = slug[0] === 'all' ? undefined : slug[0];
   console.log('🚀 ~ NoteFilters ~ category:', category);
+  const queryClient = new QueryClient();
 
-  const data = await fetchNotes({ search: '', page: 1, tag: category });
+  await queryClient.prefetchQuery({
+    queryKey: ['notes', '', 1],
+    queryFn: () => fetchNotes({ search: '', page: 1 }),
+  });
 
   return (
     <>
-      <div>
-        <h1>Note by filters</h1>
-        <NoteList notes={data.notes} />
-      </div>
+      <HydrationBoundary state={dehydrate(queryClient)}>
+        <NotesClient />
+      </HydrationBoundary>
     </>
   );
 };

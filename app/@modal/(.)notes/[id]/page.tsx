@@ -1,5 +1,7 @@
 import Modal from '@/components/Modal/Modal';
 import { fetchOneNote } from '@/lib/api';
+import { QueryClient, HydrationBoundary, dehydrate } from '@tanstack/react-query';
+import NotePreviewClient from './NotePreview.client';
 
 interface NotesPreviewProps {
   params: Promise<{ id: string }>;
@@ -7,12 +9,18 @@ interface NotesPreviewProps {
 
 const NotesPreview = async ({ params }: NotesPreviewProps) => {
   const { id } = await params;
-  const note = await fetchOneNote(id);
+  const queryClient = new QueryClient();
+
+  await queryClient.prefetchQuery({
+    queryKey: ['note', id],
+    queryFn: () => fetchOneNote(id),
+  });
   return (
     <>
       <Modal>
-        <h2>{note.title}</h2>
-        <p>{note.content}</p>
+        <HydrationBoundary state={dehydrate(queryClient)}>
+          <NotePreviewClient />
+        </HydrationBoundary>
       </Modal>
     </>
   );
