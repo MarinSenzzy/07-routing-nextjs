@@ -1,4 +1,3 @@
-import Modal from '@/components/Modal/Modal';
 import { fetchOneNote } from '@/lib/api';
 import { QueryClient, HydrationBoundary, dehydrate } from '@tanstack/react-query';
 import NotePreviewClient from './NotePreview.client';
@@ -17,11 +16,9 @@ const NotesPreview = async ({ params }: NotesPreviewProps) => {
   });
   return (
     <>
-      <Modal>
-        <HydrationBoundary state={dehydrate(queryClient)}>
-          <NotePreviewClient />
-        </HydrationBoundary>
-      </Modal>
+      <HydrationBoundary state={dehydrate(queryClient)}>
+        <NotePreviewClient />
+      </HydrationBoundary>
     </>
   );
 };
