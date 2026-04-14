@@ -36,14 +36,14 @@ const NoteFilters = async ({ params }: NoteFiltersProps) => {
   const queryClient = new QueryClient();
 
   await queryClient.prefetchQuery({
-    queryKey: ['notes', '', 1],
-    queryFn: () => fetchNotes({ search: '', page: 1 }),
+    queryKey: ['notes', '', 1, category],
+    queryFn: () => fetchNotes({ search: '', page: 1, tag: category }),
   });
 
   return (
     <>
       <HydrationBoundary state={dehydrate(queryClient)}>
-        <NotesClient />
+        <NotesClient initialTag={category} />
       </HydrationBoundary>
     </>
   );

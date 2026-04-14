@@ -12,9 +12,12 @@ import { fetchNotes } from '@/lib/api';
 import Pagination from '@/components/Pagination/Pagination';
 import Modal from '@/components/Modal/Modal';
 
-const NotesClient = () => {
+interface NotesClientProps {
+  initialTag: string | undefined;
+}
+
+const NotesClient = ({ initialTag }: NotesClientProps) => {
   const [search, setSearch] = useState<string>('');
-  const [tag, setTag] = useState<string | undefined>(undefined);
   const [page, setPage] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -22,8 +25,8 @@ const NotesClient = () => {
 
   const closeModal = () => setIsModalOpen(false);
   const { data, isLoading, isError, isSuccess, error } = useQuery({
-    queryKey: ['notes', search, page, tag],
-    queryFn: () => fetchNotes({ search, page, tag }),
+    queryKey: ['notes', search, page, initialTag],
+    queryFn: () => fetchNotes({ search, page, tag: initialTag }),
     refetchOnMount: false,
     placeholderData: keepPreviousData,
     staleTime: 5 * 60 * 1000,
